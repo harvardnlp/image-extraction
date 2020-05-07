@@ -61,7 +61,7 @@ def main(args):
             disp = get_histogram_dispersion(cropped_example.histogram())
             if disp > best:
                 best = disp
-                name = args.out_dir + "/" + g_f + ".png"
+                name = args.out_dir + "/" + g + ".png"
                 print("Saving ", name)
                 cropped_example.save(name)
 
