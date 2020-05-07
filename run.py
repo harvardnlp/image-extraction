@@ -8,6 +8,23 @@ import argparse
 os.system("mkdir dataset")
 os.system("mkdir out")
 
+
+def get_histogram_dispersion(histogram):
+    log2 = lambda x:log(x)/log(2)
+    
+    total = len(histogram)
+    counts = {}
+    for item in histogram:
+        counts.setdefault(item,0)
+        counts[item]+=1
+        
+    ent = 0
+    for i in counts:
+        p = float(counts[i])/total
+        ent-=p*log2(p)
+    return -ent*log2(1/ent)
+        
+
 def main(args):
     for g_f in glob.glob(args.data_dir + "/*.pdf"):
         g = g_f.split("/")[-1]
@@ -34,7 +51,7 @@ def main(args):
         if not os.path.exists("out/out.csv"):
             print("failed")
             continue
-        d = -1e9
+        best = -1e9
         for i, l in enumerate(open("out/out.csv")):
             print(i)
             f, x0, y0, x1, y1, _ = l.strip().split(";")
@@ -43,7 +60,11 @@ def main(args):
             cropped_example = original.crop(
                 (int(x0) - 20, int(y0) - 20, int(x1) + 20, int(y1) + 20)
             )
-            cropped_example.save(out_dir + "/" + f + "." + str(i) + ".png")
+        
+            disp = get_histogram_dispersion(im.histogram())
+            if disp > best:
+                disp = size
+                cropped_example.save(out_dir + "/" + f + ".png")
 
 
 if __name__ == "__main__":
