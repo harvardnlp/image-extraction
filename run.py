@@ -37,7 +37,6 @@ def main(args):
             + g
             + "-%04d.png"
         )
-        print(command)
         os.system(command)
         command2 = (
             "python infer_simple.py "
@@ -47,15 +46,13 @@ def main(args):
             + " --wts model_final.pkl dataset/ > tmp 2> tmp.err"
         )
         os.system(command2)
-        print(g)
         if not os.path.exists("out/out.csv"):
-            print("failed")
+            print("No pic found for " + g_f )
             continue
         best = -1e9
         for i, l in enumerate(open("out/out.csv")):
             print(i)
             f, x0, y0, x1, y1, _ = l.strip().split(";")
-            print(f)
             original = Image.open("dataset/" + f)
             cropped_example = original.crop(
                 (int(x0) - 20, int(y0) - 20, int(x1) + 20, int(y1) + 20)
@@ -64,7 +61,9 @@ def main(args):
             disp = get_histogram_dispersion(cropped_example.histogram())
             if disp > best:
                 best = disp
-                cropped_example.save(args.out_dir + "/" + g_f + ".png")
+                name = args.out_dir + "/" + g_f + ".png"
+                print("Saving ", name)
+                cropped_example.save(name)
 
 
 if __name__ == "__main__":
