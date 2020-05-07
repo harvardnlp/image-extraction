@@ -1,6 +1,6 @@
 Code for extracting a representative image from a PDF file using CV.
 
-This code needs to be run on GPU. We include a colab example
+This code needs to be run on GPU. We include a colab example.
 
 ## Setup
 
