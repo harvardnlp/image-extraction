@@ -61,14 +61,13 @@ def main(args):
                 (int(x0) - 20, int(y0) - 20, int(x1) + 20, int(y1) + 20)
             )
         
-            disp = get_histogram_dispersion(im.histogram())
+            disp = get_histogram_dispersion(cropped_example.histogram())
             if disp > best:
                 disp = size
                 cropped_example.save(out_dir + "/" + f + ".png")
 
 
 if __name__ == "__main__":
-    """ This is executed when run from the command line """
     parser = argparse.ArgumentParser()
 
     # Required positional argument
